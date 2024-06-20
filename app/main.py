@@ -1,6 +1,6 @@
 from typing import Generator
 
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, status
 from sqlalchemy.orm import Session
 
 from . import crud, schema
@@ -18,12 +18,9 @@ def get_db() -> Generator[Session, None, None]:
         db.close()
 
 
-@app.post("/game")
+@app.post("/game", status_code=status.HTTP_201_CREATED)
 def create_game(game: schema.GameCreate, db: Session = Depends(get_db)) -> schema.Game:
-    try:
-        db_game = crud.create_game(db, game)
-    except ValueError:
-        pass
+    db_game = crud.create_game(db, game)
     db.commit()
     db.refresh(db_game)
     return db_game
@@ -33,11 +30,11 @@ def create_game(game: schema.GameCreate, db: Session = Depends(get_db)) -> schem
 def get_game(game_id: int, db: Session = Depends(get_db)) -> schema.Game:
     db_game = crud.get_game(db, game_id)
     if not db_game:
-        raise HTTPException(status_code=404)
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     return crud.get_game(db, game_id)
 
 
-@app.post("/game/{game_id}/round")
+@app.post("/game/{game_id}/round", status_code=status.HTTP_201_CREATED)
 def create_round(
     game_id: int, round: schema.RoundCreate, db: Session = Depends(get_db)
 ) -> schema.Round:
@@ -63,5 +60,5 @@ def get_round(
 ) -> schema.Round:
     db_round = crud.get_round(db, game_id, round_id)
     if not db_round:
-        raise HTTPException(status_code=404)
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
     return db_round
