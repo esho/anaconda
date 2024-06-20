@@ -30,7 +30,7 @@ def _compute_outcome(
     raise ValueError("Incompatible play")
 
 
-def get_round(db: Session, game_id: int, round_id: int) -> schema.RoundModel | None:
+def get_round(db: Session, game_id: int, round_id: int) -> schema.Round | None:
     return (
         db.query(models.Round)
         .where(models.Round.id == round_id, models.Round.game_id == game_id)
@@ -38,13 +38,13 @@ def get_round(db: Session, game_id: int, round_id: int) -> schema.RoundModel | N
     )
 
 
-def get_rounds(db: Session, game_id: int) -> list[schema.RoundModel]:
+def get_rounds(db: Session, game_id: int) -> list[schema.Round]:
     return db.query(models.Round).where(models.Round.game_id == game_id).all()
 
 
 def create_round(
     db: Session, game_id: int, round: schema.RoundCreate
-) -> schema.RoundModel:
+) -> schema.Round:
     if db.query(
         exists().where(models.Game.is_player_2_cpu == True, models.Game.id == game_id)
     ).scalar():
@@ -59,16 +59,13 @@ def create_round(
                 "`player_2_play` cannot be `null` if `is_player_2_cpu` is `false`"
             )
 
-    outcome = _compute_outcome(round.player_1, round.player_2)
+    outcome = _compute_outcome(round.player_1_play, round.player_2_play)
     db_round = models.Round(
         game_id=game_id,
-        player_1=round.player_1,
-        player_2=round.player_2,
+        player_1_play=round.player_1_play,
+        player_2_play=round.player_2_play,
         outcome=outcome,
     )
     db.add(db_round)
-    db.flush()
-    db.refresh(db_round)
-    update_game_results(db, game_id)
 
     return db_round

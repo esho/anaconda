@@ -8,15 +8,15 @@ from app.database import Base
 
 
 class PlayEnum(enum.Enum):
-    ROCK = 1
-    PAPER = 2
-    SCISSOR = 3
+    ROCK = "rock"
+    PAPER = "paper"
+    SCISSOR = "scissor"
 
 
 class OutcomeEnum(enum.Enum):
-    PLAYER_1 = 1
-    PLAYER_2 = 2
-    DRAW = 3
+    PLAYER_1 = "player_1"
+    PLAYER_2 = "player_2"
+    DRAW = "draw"
 
 
 class Round(Base):

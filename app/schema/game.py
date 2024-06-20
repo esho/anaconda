@@ -27,17 +27,12 @@ class GameCreate(GameBase):
         return self
 
 
-class GameModelBase(GameBase):
+class Game(GameBase):
+    class Config:
+        orm_mode = True
+
     id: int
     player_1_wins: int
     player_2_wins: int
     draws: int
     created: datetime
-
-
-class GameModel(GameModelBase):
-    pass
-
-
-class Game(GameModel):
-    pass

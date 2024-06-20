@@ -1,2 +1,2 @@
-from .game import Game, GameCreate, GameModel
-from .round import Round, RoundCreate, RoundModel
+from .game import Game, GameCreate, Game
+from .round import Round, RoundCreate, Round

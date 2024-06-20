@@ -15,16 +15,11 @@ class RoundCreate(RoundBase):
     player_2_play: PlayEnum | None = None
 
 
-class RoundModelBase(RoundBase):
+class Round(RoundBase):
+    class Config:
+        orm_mode = True
+
     id: int
     game_id: int
     outcome: OutcomeEnum
     created: datetime
-
-
-class RoundModel(RoundModelBase):
-    pass
-
-
-class Round(RoundModel):
-    pass

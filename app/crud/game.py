@@ -4,19 +4,17 @@ from sqlalchemy import func
 from app import models, schema
 
 
-def get_game(db: Session, game_id: int) -> schema.GameModel:
+def get_game(db: Session, game_id: int) -> schema.Game | None:
     return db.query(models.Game).where(models.Game.id == game_id).first()
 
 
-def create_game(db: Session, game: schema.GameCreate) -> schema.GameModel:
+def create_game(db: Session, game: schema.GameCreate) -> schema.Game:
     db_game = models.Game(
         player_1=game.player_1,
         player_2=game.player_2,
         is_player_2_cpu=game.is_player_2_cpu,
     )
     db.add(db_game)
-    db.flush()
-    db.refresh(db_game)
     return db_game
 
 
