@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql import exists
 
 from app import models, schema
-from app.crud.game import update_game_results
 
 
 PLAY_OUTCOME_MAPPING = {
@@ -44,7 +43,7 @@ def get_rounds(db: Session, game_id: int) -> list[schema.Round]:
 
 def create_round(db: Session, game_id: int, round: schema.RoundCreate) -> schema.Round:
     if db.query(
-        exists().where(models.Game.is_player_2_cpu == True, models.Game.id == game_id)
+        exists().where(models.Game.is_player_2_cpu is True, models.Game.id == game_id)
     ).scalar():
         if round.player_2_play is not None:
             raise ValueError(
