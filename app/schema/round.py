@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel
 
@@ -13,7 +12,7 @@ class RoundBase(BaseModel):
 
 class RoundCreate(RoundBase):
     player_1_play: PlayEnum
-    player_2_play: Optional[PlayEnum] = None
+    player_2_play: PlayEnum | None = None
 
 
 class RoundModelBase(RoundBase):

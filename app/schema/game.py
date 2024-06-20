@@ -16,14 +16,14 @@ class GameCreate(GameBase):
     def validate_is_player_2_cpu(self):
         if self.player_2 and self.is_player_2_cpu:
             raise ValueError(
-                "Cannot set `is_player_2_cpu` to `true` and set `player_2`"
+                "Cannot set `is_player_2_cpu` to `true` and set `player_2` to non-null"
             )
         return self
 
     @model_validator(mode="after")
     def validate_distinct_player_names(self):
         if self.player_1 == self.player_2:
-            raise ValueError("Player 1 and Player 2 cannot have same name")
+            raise ValueError("`player_1` and `player_2` cannot have same value")
         return self
 
 
