@@ -42,9 +42,7 @@ def get_rounds(db: Session, game_id: int) -> list[schema.Round]:
     return db.query(models.Round).where(models.Round.game_id == game_id).all()
 
 
-def create_round(
-    db: Session, game_id: int, round: schema.RoundCreate
-) -> schema.Round:
+def create_round(db: Session, game_id: int, round: schema.RoundCreate) -> schema.Round:
     if db.query(
         exists().where(models.Game.is_player_2_cpu == True, models.Game.id == game_id)
     ).scalar():
